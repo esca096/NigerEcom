@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div class="row">
+        {% for product in products %}
+        <div class="col-md-3">
+            <div class="card" style="width: 18rem;">
+                {% if product.image %}
+                <img src="{{ product.image.url }}" class="card-img-top" alt="...">
+                {% else %}
+                <h3> No image </h3>
+                {% endif %}
+                <div class="card-body">
+                  <h5 class="card-title">{{ product.name }}</h5>
+                  <p class="card-text">{{ product.description }} {{ product.price }} $</p>
+                  <a href="#" class="btn btn-primary">Go somewhere</a>
+                </div>
+              </div>
+        </div> 
+        {% endfor %}
+    </div>
+{% endblock content %}
