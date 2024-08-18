@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <center>
+        <h1 style="color: darkblue;">Product's Management table</h1>
+
+        <table class="table table-dark table-striped">
+            <thead>
+                <tr>
+                  <th scope="col">Id</th>
+                  <th scope="col">Name</th>
+                  <th scope="col">View</th>
+                  <th scope="col">Modify</th>
+                  <th scope="col">Delete</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for product in obj %}
+                    <tr>
+                        <th scope="row">{{ product.id }}</th>
+                        <td>{{ product.name }}</td>
+                        <td><a href="" class="btn btn-primary">View</a></td>
+                        <!-- ce lien provient du model  Product -->
+                        <td><a href="{{ product.get_absolute_url }}" class="btn btn-warning">Modify</a></td>
+                        <!-- c'est un lien dynamique qui provient du urls product_delete et s'ecrit sous cette forme en html -->
+                        <td><a href="product_delete/{{product.id}}" class="btn btn-danger">Delete</a></td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </center>
+{% endblock content %}
+
+<!-- 
+ce lien dynamique est operationnel 
+<td><a href="product_update/{{product.id}}" class="btn btn-warning">Modify</a></td>
+-->

@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <center>
+        <h1> Are you sure that you want to delete {{ name }} product?</h1>
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <!-- 'table' ici est le nom du lien product_table depuis urls qu'il faut utiliser en html -->
+            <button class="btn btn-primary"><a href="{% url 'table' %}" class="text-white">Cancel</a></button>
+            <button type="submit" class="btn btn-danger">Delete</button>
+        </form>
+        
+    </center>
+{% endblock content %}
+

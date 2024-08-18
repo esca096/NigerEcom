@@ -87,7 +87,7 @@ class ProductForm(forms.ModelForm):
     # Ces fonctions permettent de poser des conditions au niveaux du formulaire complexe
         
         
-    #cette condition permet de mettre un nomre >=10 dans PRICE
+    #cette condition permet de verifier PRICE
     def clean_price(self, *args, **kwargs):
         price = self.cleaned_data.get('price')
         if price >= 10:

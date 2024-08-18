@@ -1,4 +1,5 @@
 from django.db import models
+from django.urls import reverse
 
 # Create your models here.
 
@@ -13,3 +14,9 @@ class Product(models.Model):
     
     def __str__(self):
         return self.name
+    
+    
+    #cette fonction permet de gerer les liens dynamiques --> "update" est le nom du lien product_update au niveau urls
+    def get_absolute_url(self):
+        return reverse("update", kwargs={"my_id": self.pk})
+    
