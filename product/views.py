@@ -1,13 +1,18 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from django.http import Http404
 from .models import Product
-from .form import  ProductForm # import rowproductform pour utiliser formulaire robuste
+from .form import UserForm ,  ProductForm # import rowproductform pour utiliser formulaire robuste
+from django.contrib import messages
+
+#ces fonction sont dedie au register & sign In
+from django.contrib.auth import login, logout, authenticate
+from django.contrib.auth.decorators import login_required
+
 # Create your views here.
 
 def home(request):
     return render(request, 'index.html')
 
-
+@login_required
 def product_list(request, *args, **kwargs):
     product = Product.objects.all()
     context={
@@ -48,6 +53,7 @@ def product_list(request, *args, **kwargs):
 
 
 #Ce formulaire la combinaison du formulaire robuste et simple ---> formulaire complexe
+@login_required
 def product_create(request):
     messages = ''
     form = ProductForm(request.POST or None)
@@ -59,6 +65,7 @@ def product_create(request):
 
 
 #Ce code permet d'apporter des modifications a notre formulaire complexe, my_id sert de lien dynamique pour modife de la table
+@login_required
 def product_update(request, my_id):
     messages = ''
     
@@ -80,11 +87,13 @@ def product_update(request, my_id):
 
 
 #Creation d'une table pour afficher les produits et  pour faire le CRUD
+@login_required
 def product_table(request):
     obj = Product.objects.all()
     return render(request, 'products/product_table.html', {'obj':obj})
 
 #cette fonction permet de faire la suppression des produit
+@login_required
 def  product_delete(request, my_id):
     obj = get_object_or_404(Product, id=my_id)
     name = obj.name
@@ -92,3 +101,37 @@ def  product_delete(request, my_id):
         obj.delete()
         return redirect('table') # redirection vers la page de table et utiliser le nom du lien product_table
     return render(request, 'products/product_delete.html', {'name':name})
+
+
+
+
+
+def register(request):
+    form = UserForm()
+    if request.method == 'POST':
+        form = UserForm(data=request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Your account was created successfuly')
+            return redirect('login')
+        else:
+            messages.error(request, form.errors)
+    return render(request, 'products/register.html', {'form':form})
+
+def connexion(request):
+    if request.method == 'POST':
+        username = request.POST['username']
+        password = request.POST['password']
+        user = authenticate(request, username=username, password=password)
+        if user is not None and user.is_active:
+            login(request, user)
+            messages.success(request, 'Welcome in your page')
+            return redirect('list')
+        else:
+            messages.error(request, 'Worng authenticate')
+    return render(request, 'products/login.html')
+
+@login_required
+def deconnexion(request):
+    logout(request)
+    return redirect('login')

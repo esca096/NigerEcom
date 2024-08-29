@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <center>
+        <h1><strong>REGISTER</strong></h1>
+        {% for message in messages %}
+            <strong>  {{ message }} </strong>
+        {% endfor %}
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">Save</button>
+        </form>
+        
+    </center>
+{% endblock content %}
+

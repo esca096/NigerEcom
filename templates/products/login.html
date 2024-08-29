@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <center>
+        <h1><strong>SIGN IN</strong></h1>
+        {% for message in messages %}
+            <strong>  {{ message }} </strong>
+        {% endfor %}
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <input type="text" name="username" placeholder="enter your username">
+            <br><br>
+            <input type="password" name="password" placeholder="enter your password">
+            <br><br>
+            <button type="submit">Save</button>
+        </form>
+        
+    </center>
+{% endblock content %}
+
