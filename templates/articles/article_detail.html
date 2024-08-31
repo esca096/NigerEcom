@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-md-4">
+            {% if object.images %}
+                <img src="{{ object.images.url }}" class="card-img-top" alt="...">
+            {% else %}
+                <p>AUCUNE IMAGE</p>
+            {% endif %}
+            <h3 style="color: darkblue;">{{ object.title }}</h3>
+            <p style="color: gold;">{{ object.description }}</p>
+            <p style="color: gold;">{{ object.slug }}</p>
+        </div>
+    </div>
+
+{% endblock content %}
