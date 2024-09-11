@@ -12,13 +12,30 @@ from django.contrib.auth.decorators import login_required
 def home(request):
     return render(request, 'index.html')
 
-@login_required
+@login_required(login_url='login')
 def product_list(request, *args, **kwargs):
+    #ce code gerer la partie des session
+    number = request.session.get('visit', 0) + 1
+    request.session['visit'] = number
+    if number > 4:
+        del(request.session['visit'])
+    
+    #  ce code affiche toute les produit depuis la base de donner
     product = Product.objects.all()
+    
     context={
-        'products':product
+        'products':product,
+        'number':number
     }
-    return render(request, 'products/product_list.html', context)
+    
+    #ce code gerer la partie les cookies
+    reponse = render(request, 'products/product_list.html', context)
+    
+    username = request.user.username
+    password = request.user.password
+    reponse.set_cookie('username', username, """max_age=1000""")
+    reponse.set_cookie('password', password)
+    return reponse
 
 
 
@@ -53,7 +70,7 @@ def product_list(request, *args, **kwargs):
 
 
 #Ce formulaire la combinaison du formulaire robuste et simple ---> formulaire complexe
-@login_required
+@login_required(login_url='login')
 def product_create(request):
     messages = ''
     form = ProductForm(request.POST or None)
@@ -65,7 +82,7 @@ def product_create(request):
 
 
 #Ce code permet d'apporter des modifications a notre formulaire complexe, my_id sert de lien dynamique pour modife de la table
-@login_required
+@login_required(login_url='login')
 def product_update(request, my_id):
     messages = ''
     
@@ -87,13 +104,13 @@ def product_update(request, my_id):
 
 
 #Creation d'une table pour afficher les produits et  pour faire le CRUD
-@login_required
+@login_required(login_url='login')
 def product_table(request):
     obj = Product.objects.all()
     return render(request, 'products/product_table.html', {'obj':obj})
 
 #cette fonction permet de faire la suppression des produit
-@login_required
+@login_required(login_url='login')
 def  product_delete(request, my_id):
     obj = get_object_or_404(Product, id=my_id)
     name = obj.name
@@ -105,7 +122,7 @@ def  product_delete(request, my_id):
 
 
 
-
+# ces codes geres la partie d'authentification
 def register(request):
     form = UserForm()
     if request.method == 'POST':
