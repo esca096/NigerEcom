@@ -33,7 +33,7 @@ def product_list(request, *args, **kwargs):
     
     username = request.user.username
     password = request.user.password
-    reponse.set_cookie('username', username, """max_age=1000""")
+    reponse.set_cookie('username', username, """max_age=1000 delai d'expiration""")
     reponse.set_cookie('password', password)
     return reponse
 
