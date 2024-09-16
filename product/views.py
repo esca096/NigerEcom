@@ -15,27 +15,34 @@ def home(request):
 @login_required(login_url='login')
 def product_list(request, *args, **kwargs):
     #ce code gerer la partie des session
-    number = request.session.get('visit', 0) + 1
+    """number = request.session.get('visit', 0) + 1
     request.session['visit'] = number
     if number > 4:
-        del(request.session['visit'])
+        del(request.session['visit'])"""
     
     #  ce code affiche toute les produit depuis la base de donner
     product = Product.objects.all()
     
+    #Active la zone de recherche
+    if request.method == "GET":
+        name = request.GET.get('search')
+        if name is not None:
+            product = Product.objects.filter(name__icontains=name)
+    
     context={
         'products':product,
-        'number':number
+        #'number':number
     }
     
     #ce code gerer la partie les cookies
-    reponse = render(request, 'products/product_list.html', context)
+    """"reponse = render(request, 'products/product_list.html', context)
     
     username = request.user.username
     password = request.user.password
-    reponse.set_cookie('username', username, """max_age=1000 delai d'expiration""")
-    reponse.set_cookie('password', password)
-    return reponse
+    reponse.set_cookie('username', username) #max_age=1000 delai d'expiration
+    reponse.set_cookie('password', password)"""
+    
+    return render(request, 'products/product_list.html', context)
 
 
 
